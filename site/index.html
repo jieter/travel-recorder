@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Leaflet Provider Demo</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+
+	<style>
+		html {
+			height: 100%;
+			-moz-box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			vertical-align: baseline;
+		}
+		body, #container { height: 100%; margin: 0; padding: 0;}
+		.map { height: 100%; }
+	</style>
+</head>
+<body>
+	<div id="map" class="map"></div>
+
+	<script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet-src.js"></script>
+	<script src="leaflet-providers.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script>
+
+	var map = L.map('map', {
+		center: [52, 4.6],
+		zoom: 12
+	});
+	map.addLayer(L.tileLayer.provider('Stamen.TonerLite'));
+
+	$.get('2014-07-20-log.csv', function(data) {
+		var rows = data.split('\n');
+
+		var latlngs = [];
+		var p = L.polyline([], {color: 'red', weight: 3}).addTo(map);
+
+		rows.forEach(function(row) {
+			var fields = row.split(';');
+			if (fields.length < 3) {
+				return;
+			}
+
+			var latlng = [
+				+fields[1],
+				+fields[2]
+			]
+			latlngs.push(latlng);
+
+			L.circleMarker(latlng, {
+				radius: 5,
+				color: 'red'
+			})
+				.bindPopup('Snelheid: ' + Math.round(+fields[3] * 1.852) + 'km/h')
+				.addTo(map)
+
+
+
+		});
+		p.setLatLngs(latlngs);
+
+	});
+
+	</script>
+</body>
+</html>

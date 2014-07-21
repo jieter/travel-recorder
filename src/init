@@ -1,0 +1,27 @@
+#!/bin/sh /etc/rc.common
+## Oasen monitor, start at boot
+
+
+START=10
+STOP=15
+
+start() {
+	echo "starting Travelrecorder deamon"
+
+	# redirect stdout to log file
+	exec 1>/tmp/log/travelrecorder
+
+	# stderr
+	#exec 2>/tmp/log/travelrecorder
+
+	export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+
+	cd /root/
+	mount /dev/sda1 data/
+	/usr/bin/python app.py &
+}
+
+stop() {
+	echo "stop Travelrecorder deamon"
+	killall python
+}
