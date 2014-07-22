@@ -13,15 +13,14 @@ else
 fi
 
 cd /root/
-alias l='ls'
-
-# clean old stuff
-rm *.pyc *.tar
 
 # get new stuff
 wget http://192.168.178.76:3000/travel-recorder/travel-recorder.tar.gz
 gunzip travel-recorder.tar.gz
 tar -xf travel-recorder.tar
+
+# clean old stuff
+rm *.pyc *.tar
 
 # set/clean init scripts
 mv rc-local /etc/rc.local

@@ -5,37 +5,24 @@ from datetime import datetime, timedelta
 import os
 import pynmea2
 from pynmea2.types import GGA, RMC
-import serial
+import time
+import sys
+from commands import getoutput
 
-def open_gps():
-    port = serial.Serial()
-    port.baudrate = 4800
-    port.port = '/dev/ttyUSB0'
-    port.xonxoff = 1
-
-    port.open()
-
-    # discard 2 raw lines:
-    port.readline()
-    port.readline()
-
-    return port
-
+from util import taskRunner, open_gps
 
 class LogFile(object):
     filename = None
     last = None
     LOG_FORMAT = '%Y-%m-%d-log.csv'
 
-    def __init__(self, path = '/tmp', interval=30):
+    def __init__(self, path = '/tmp', interval=20):
         if not os.path.exists(path):
             os.mkdir(path)
 
         self.path = path
 
         self.interval = timedelta(seconds=interval)
-
-        print self.path, self.interval
 
     def write(self, record):
         try:
@@ -51,12 +38,22 @@ class LogFile(object):
 
         if self.filename is filename:
             return
+
         self.filename = filename
         self.file = open(filename, 'a')
+
+        # update index
+        indexFile = os.path.join(self.path, 'index.txt')
+        with open(indexFile, 'w') as index:
+            for f in os.listdir(self.path):
+                if f.endswith('.csv'):
+                    index.write(str(f) + '\n')
+
 
 
     def add(self, record):
         if self.last is None or record.datetime() - self.last >= self.interval:
+
             self.last = record.datetime()
 
             self.set_date(record.datetime())
@@ -83,7 +80,7 @@ class MsgWrapper(object):
         return datetime.combine(self.msg.datestamp, self.msg.timestamp)
 
     def speed(self):
-        return self.msg.spd_over_grnd()
+        return self.msg.spd_over_grnd
 
     def log(self):
         log.add(self)
@@ -99,19 +96,51 @@ class MsgWrapper(object):
         return self.msg.__str__()
 
 
-DATA_PATH = 'data/'
+DATA_PATH = 'site/data/'
 log = LogFile(DATA_PATH)
 
-def log_speed(speed):
-    with open(os.path.join(DATA_PATH, 'speed.txt'), 'w') as l:
-        l.write('%0.00f' % speed)
+def log_1hz(msg):
+    with open(os.path.join(DATA_PATH, 'current.txt'), 'w') as l:
+        if msg.speed():
+            l.write('{"speed": %0.00f, "location": [%f, %f], "timestamp": "%s"}' % (
+                msg.speed(),
+                msg.latitude,
+                msg.longitude,
+                msg.datetime()
+            ))
+        else:
+            l.write('{"message": "No Fix"}')
+
+
+def mount_usb():
+    '''mount usb stick if not mounted'''
+
+    try:
+        res = getoutput('ifconfig | grep 90:2b:34:d0:99:88')
+        if len(res) > 0:
+            print 'This is not carambola'
+            return
+
+        res = getoutput('mount | grep /root/site')
+        if not res.startswith('/dev/sda1'):
+            os.system('rm /root/site')
+            os.system('mount /dev/sda1 /root/site')
+            print 'mounted usb stick'
+        else:
+            print 'not mounting'
+
+    except Exception, e:
+        print str(e)
+
 
 def main():
-    print 'Starting...'
+    print 'Starting travel-recorder...'
+
+    mount_usb()
+    print getoutput('/bin/sh /root/fix-wifi.sh')
+    taskRunner(100, mount_usb)
 
     gps = open_gps()
-
-    print 'trying streamreader: '
     streamreader = pynmea2.NMEAStreamReader(gps)
 
     while True:
@@ -121,11 +150,17 @@ def main():
 
                 msg.log()
 
-                log_speed(msg.speed())
+                log_1hz(msg)
 
 
 if __name__ == '__main__':
-    try:
-        main()
-    except KeyboardInterrupt:
-        log.close()
+    while True:
+        try:
+            main()
+        except KeyboardInterrupt:
+            log.close()
+            sys.exit()
+        # except Exception, e:
+        #     print 'Error: ', str(e)
+        #     print 'Sleeping for 60 seconds and try to restart main thread...'
+        #     time.sleep(60)

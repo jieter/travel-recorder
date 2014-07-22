@@ -18,13 +18,20 @@
 		}
 		body, #container { height: 100%; margin: 0; padding: 0; }
 		.map { height: 100%; }
+		.info {
+			padding: 6px 8px;
+			font: 14px/16px Arial, Helvetica, sans-serif;
+			background: white;
+			background: rgba(255, 255, 255, 0.9);
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+			border-radius: 5px;
+		}
 	</style>
 </head>
 <body>
 	<div id="map" class="map"></div>
 
 	<script src="leaflet/leaflet.js"></script>
-	<script src="leaflet-providers.js"></script>
 	<script src="zepto.min.js"></script>
 	<script src="util.js"></script>
 

@@ -2,7 +2,7 @@
 ## Oasen monitor, start at boot
 
 
-START=10
+START=99
 STOP=15
 
 start() {
@@ -17,7 +17,7 @@ start() {
 	export PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
 	cd /root/
-	mount /dev/sda1 data/
+	./fix-wifi.sh
 	/usr/bin/python app.py &
 }
 

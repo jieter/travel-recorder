@@ -1,3 +1,6 @@
 *.pyc
 *.tar.gz
 *.bin
+
+
+src/site/tiles
