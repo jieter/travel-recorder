@@ -12,5 +12,8 @@ L.Polyline.include({
 		}
 
 		return distance;
+	},
+	distanceTraveled: function () {
+		return (Math.round(this._distanceMeters() / 100) / 10).toFixed(1) + 'km'
 	}
 });

@@ -1,8 +1,12 @@
 var map = L.map('map', {
-	center: [52, 4.6],
-	zoom: 9,
+	center: [55, 4.6],
+	zoom: 6,
 	zoomControl:false
 });
+
+var Thunderforest_Outdoors = L.tileLayer('http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+}).addTo(map);
 // var tilelayer = L.tileLayer('tiles/{z}/{x}/{y}.png', {
 // 	maxZoom: 13,
 // 	maxNativeZoom: 12,
@@ -13,7 +17,7 @@ var map = L.map('map', {
 // 	maxZoom: 18,
 // 	attribution: 'Tiles courtesy of <a href="http://hot.openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
 // }).addTo(map);
-L.tileLayer('http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=norges_grunnkart&zoom={z}&x={x}&y={y}', {
+var norway = L.tileLayer('http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=norges_grunnkart&zoom={z}&x={x}&y={y}', {
 			name: 'Enkelt',
 			attribution: '&copy; <a href="http://kartverket.no/">Kartverket</a>'
 		}).addTo(map);
@@ -33,6 +37,7 @@ var current = L.marker([0, 0]);
 
 
 var layersControl = L.control.layers({}, {
+	'kartverket': norway,
 	'LPG Noorwegen': lpg,
 	'Heenweg': heenweg,
 	'Daglogs': lines,
@@ -111,16 +116,21 @@ var displayLog = function(data) {
 
 	var p = L.polyline(latlngs, {color: 'red', weight: 3})
 		.on('click', function (){
-			info('Dagafstand: ' + (Math.round(p._distanceMeters()/100) / 10) + 'km');
+			info('Dagafstand: ' + p.distanceTraveled());
 		})
 		.addTo(lines);
+	return p;
+
 }
 
 $.get('data/index.txt', function (data) {
 	var logs = data.split('\n');
 
 	logs.forEach(function (filename) {
-		$.get('data/' + filename, displayLog);
+		$.get('data/' + filename, function (data) {
+			var line = displayLog(data);
+			console.log(filename, line.distanceTraveled())
+		});
 	});
 
 });
@@ -134,16 +144,16 @@ infoControl.addTo(map);
 
 
 
-var update = function () {
-	$.getJSON('data/current.txt', function (data) {
-		if (data.message) {
-			info(data.message);
-		} else {
-			info(data.speed + 'km/h');
-			current.setLatLng(data.location)
-		}
-	})
+// var update = function () {
+// 	$.getJSON('data/current.txt', function (data) {
+// 		if (data.message) {
+// 			info(data.message);
+// 		} else {
+// 			info(data.speed + 'km/h');
+// 			current.setLatLng(data.location)
+// 		}
+// 	})
 
-}
+// }
 
-setInterval(update, 1500);
+// setInterval(update, 1500);
