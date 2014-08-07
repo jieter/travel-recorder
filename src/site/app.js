@@ -85,38 +85,33 @@ $.get('layers/lpg-poi.csv', function (data) {
 
 });
 
-var displayLog = function(data) {
-	var rows = data.split('\n');
+var displayLog = function(logdate, data) {
+	data = data.split('\n').map(function(row) {
+		var fields = row.split(';');
+
+		if (fields.length < 5) {
+			return false;
+		}
+
+		return {
+			date: logdate,
+			time: fields[0],
+			latlng: [+fields[1], +fields[2]],
+			speed: +fields[3] * 1.852,
+		};
+	}).filter(function(record) {
+		return record.speed > 4;
+	});
 
 	var latlngs = [];
 
-	rows.forEach(function(row) {
-		var fields = row.split(';');
-		if (fields.length < 5) {
-			return;
-		}
-
-		var latlng = [
-			+fields[1],
-			+fields[2]
-		]
-
-		latlngs.push(latlng);
-
-		var speed = +fields[3] * 1.852;
-
-
-		L.circleMarker(latlng, {
-			radius: 5,
-			color: speed > 90 ? 'blue' : 'red'
-		})
-			.bindPopup('Snelheid: ' + (Math.round(speed * 10) / 10) + 'km/h')
-			.addTo(points);
+	data.forEach(function(record) {
+		latlngs.push(record.latlng);
 	});
 
 	var p = L.polyline(latlngs, {color: 'red', weight: 3})
 		.on('click', function (){
-			info('Dagafstand: ' + p.distanceTraveled());
+			info('Datum: ' + data[0].date + ' <br />Dagafstand: ' + p.distanceTraveled());
 		})
 		.addTo(lines);
 	return p;
@@ -127,9 +122,13 @@ $.get('data/index.txt', function (data) {
 	var logs = data.split('\n');
 
 	logs.forEach(function (filename) {
+		if (filename == '') {
+			return;
+		}
+		console.log('getting ' + filename)
 		$.get('data/' + filename, function (data) {
-			var line = displayLog(data);
-			console.log(filename, line.distanceTraveled())
+			var line = displayLog(filename.substr(0, 10), data);
+			console.log(filename.substr(0, 10), line.distanceTraveled())
 		});
 	});
 
