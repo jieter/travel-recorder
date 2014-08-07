@@ -3,11 +3,21 @@ var map = L.map('map', {
 	zoom: 9,
 	zoomControl:false
 });
-var offlineLayer = L.tileLayer('tiles/{z}/{x}/{y}.png', {
-	maxZoom: 13,
-	maxNativeZoom: 12,
-	minZoom: 4
-}).addTo(map);
+// var tilelayer = L.tileLayer('tiles/{z}/{x}/{y}.png', {
+// 	maxZoom: 13,
+// 	maxNativeZoom: 12,
+// 	minZoom: 4
+// }).addTo(map);
+// var Hydda_Full = L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
+// 	minZoom: 0,
+// 	maxZoom: 18,
+// 	attribution: 'Tiles courtesy of <a href="http://hot.openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+// }).addTo(map);
+L.tileLayer('http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=norges_grunnkart&zoom={z}&x={x}&y={y}', {
+			name: 'Enkelt',
+			attribution: '&copy; <a href="http://kartverket.no/">Kartverket</a>'
+		}).addTo(map);
+
 
 // Infowindow.
 var infoDiv = L.DomUtil.create('div', 'info');
