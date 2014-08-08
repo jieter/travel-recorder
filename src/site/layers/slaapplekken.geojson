@@ -1,1 +1,167 @@
-{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[7.845783233642578,52.47546169086254]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[9.945791959762573,57.58659912259689]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[9.262043237686157,59.38510812012784]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[8.008153438568115,59.44096241606213]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[7.516965866088866,59.23553503386971]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[7.8063225746154785,58.832270331350465]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[6.814785003662109,59.8320067919481]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[5.904250144958496,59.50046571922447]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[6.095609664916992,58.99791960264228]}}]}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tho-bo-garten"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.845783233642578,
+          52.47546169086254
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hirtshals"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.945791959762573,
+          57.58659912259689
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Haugen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.262043237686157,
+          59.38510812012784
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dalen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.008153438568115,
+          59.44096241606213
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Valle"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.516965866088866,
+          59.23553503386971
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bygland"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.8063225746154785,
+          58.832270331350465
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Røldal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.814785003662109,
+          59.8320067919481
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Vikedal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.904250144958496,
+          59.50046571922447
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Preikestolen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.095609664916992,
+          58.99791960264228
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gygrestolen",
+        "icon": "park",
+        "color": "#5e5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.978345990180967,
+          59.36605861959155
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Preikestolen",
+        "icon": "park",
+        "color": "#5e5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.188403367996216,
+          58.986475925793385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kålhaug",
+        "icon": "park",
+        "color": "#5e5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.795558929443359,
+          59.82877165216871
+        ]
+      }
+    }
+  ]
+}

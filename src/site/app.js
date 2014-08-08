@@ -63,14 +63,17 @@ $.getJSON('layers/route-delft-hirtshals.geojson', function (data) {
 });
 
 $.getJSON('layers/slaapplekken.geojson', function (data) {
-	layersControl.addOverlay(L.geoJson(data, {
+	L.geoJson(data, {
 		style: style,
 		pointToLayer: function (data, latlng) {
 			return L.marker(latlng, {
-				icon: L.MakiMarkers.icon({icon: 'campsite', color: '#e55'}),
+				icon: L.MakiMarkers.icon({
+					icon: data.properties.icon || 'campsite',
+					color: data.properties.color || '#e55'
+				}),
 			}).bindPopup(data.properties.name);
 		}
-	}).addTo(map), 'Kampeerlocaties');
+	}).addTo(map);
 });
 
 
@@ -151,8 +154,6 @@ infoControl.onAdd = function () {
 };
 infoControl.addTo(map);
 
-
-
 // var update = function () {
 // 	$.getJSON('data/current.txt', function (data) {
 // 		if (data.message) {
@@ -167,9 +168,9 @@ infoControl.addTo(map);
 
 // setInterval(update, 1500);
 
-var poi = L.layerGroup().addTo(map);
-map.on('click', function (e) {
-	poi.addLayer(L.marker(e.latlng));
+// var poi = L.layerGroup().addTo(map);
+// map.on('click', function (e) {
+// 	poi.addLayer(L.marker(e.latlng));
 
-	console.log(poi.toGeoJSON());
-});
+// 	console.log(JSON.stringify(poi.toGeoJSON()));
+// });
