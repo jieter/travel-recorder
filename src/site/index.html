@@ -26,12 +26,27 @@
 			box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 			border-radius: 5px;
 		}
+		.leaflet-marker-live {
+			-webkit-animation: pulse 2s ease-out;
+			animation: pulse 2s ease-out;
+			-webkit-animation-iteration-count: infinite;
+			animation-iteration-count: infinite;
+		}
+		@-webkit-keyframes pulse {
+			from { stroke-width: 15; stroke-opacity: 1; }
+			to { stroke-width: 50; stroke-opacity: 0; }
+		}
+		@keyframes pulse {
+			from { stroke-width: 15; stroke-opacity: 1; }
+			to { stroke-width: 50; stroke-opacity: 0; }
+		}
 	</style>
 </head>
 <body>
 	<div id="map" class="map"></div>
 
 	<script src="leaflet/leaflet.js"></script>
+	<script src="leaflet/Leaflet.MakiMarkers.js"></script>
 	<script src="zepto.min.js"></script>
 	<script src="util.js"></script>
 

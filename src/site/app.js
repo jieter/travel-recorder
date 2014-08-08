@@ -33,7 +33,13 @@ var lpg = L.layerGroup();
 var heenweg = L.geoJson(null, {style: style});
 var lines = L.layerGroup().addTo(map);
 var points = L.layerGroup();
-var current = L.marker([0, 0]);
+var current = L.circleMarker([0, 0], {
+	radius: 5,
+	color: 'orange',
+	fillColor: '#333',
+	fillOpacity: 1,
+	className: 'leaflet-marker-live'
+});
 
 
 var layersControl = L.control.layers({}, {
@@ -56,14 +62,18 @@ $.getJSON('layers/route-delft-hirtshals.geojson', function (data) {
 	heenweg.addData(data);
 });
 
-$.getJSON('layers/poi.geojson', function (data) {
+$.getJSON('layers/slaapplekken.geojson', function (data) {
 	layersControl.addOverlay(L.geoJson(data, {
 		style: style,
 		pointToLayer: function (data, latlng) {
-			return L.marker(latlng).bindPopup(data.properties.name);
+			return L.marker(latlng, {
+				icon: L.MakiMarkers.icon({icon: 'campsite', color: '#e55'}),
+			}).bindPopup(data.properties.name);
 		}
-	}), 'Eigen POIs');
-})
+	}).addTo(map), 'Kampeerlocaties');
+});
+
+
 $.get('layers/lpg-poi.csv', function (data) {
 	var rows = data.split('\n');
 
@@ -75,10 +85,10 @@ $.get('layers/lpg-poi.csv', function (data) {
 		if (fields.length < 3 || fields[0] > 10 || fields[1] > 60) {
 			return;
 		}
-		var marker = L.circleMarker([
+		var marker = L.marker([
 			fields[1],
 			fields[0]
-		]).bindPopup(fields[2]);
+		], { icon: L.MakiMarkers.icon({icon: 'fuel'})}).bindPopup(fields[2]);
 
 		lpg.addLayer(marker);
 	});
@@ -156,3 +166,10 @@ infoControl.addTo(map);
 // }
 
 // setInterval(update, 1500);
+
+var poi = L.layerGroup().addTo(map);
+map.on('click', function (e) {
+	poi.addLayer(L.marker(e.latlng));
+
+	console.log(poi.toGeoJSON());
+});
